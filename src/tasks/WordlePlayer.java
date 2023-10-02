@@ -29,14 +29,17 @@ public class WordlePlayer {
     long stop = System.currentTimeMillis();
     System.out.println("Completed in " + (stop - start) + " ms");
 
-    String solution = "SLYLY";
-    System.out.println("Let's play: the answer is " + solution);
+    int[] scoreTally = new int[10];
+    for (String solution : solutionWords.getWordList()) {
+      int score = simulatePlay(allowedGuesses, solutionWords, responseMatrix, solution, bestOpener);
+      scoreTally[score]++;
+      
+    }
 
-    start = System.currentTimeMillis();
-    int score = simulatePlay(allowedGuesses, solutionWords, responseMatrix, solution, bestOpener);
-    stop = System.currentTimeMillis();
+    for (int i = 1; i < scoreTally.length; i++) {
+      System.out.println(i + ": " + scoreTally[i]);
+    }
 
-    System.out.println("I got it in " + score + " attempts!");
     System.out.println("Completed in " + (stop - start) + " ms");
 
   }
