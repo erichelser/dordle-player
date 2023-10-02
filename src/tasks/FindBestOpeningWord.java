@@ -22,7 +22,6 @@ public class FindBestOpeningWord {
             solutionWords,
             true,
             false,
-            GuessEvaluator.getSingleton(),
             ClueFactory.getSingleton());
   }
 
@@ -30,7 +29,6 @@ public class FindBestOpeningWord {
                                            Dictionary potentialSolutions,
                                            boolean isVerbose,
                                            boolean isLogScale,
-                                           GuessEvaluator guessEvaluator,
                                            ClueFactory clueFactory) {
     int i = 0;
     String bestSolution = "";
@@ -44,7 +42,7 @@ public class FindBestOpeningWord {
 
       double testScore = 0;
       for (String testSolution : potentialSolutions.getWordList()) {
-        String response = guessEvaluator.evaluateGuess(testSolution, testGuess);
+        String response = GuessEvaluator.evaluateGuess(testSolution, testGuess);
         wordResponseDistributions.put(response, wordResponseDistributions.get(response) + 1);
       }
 

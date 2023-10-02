@@ -1,20 +1,8 @@
 package logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GuessEvaluator {
 
-  private static GuessEvaluator singleton;
-
-  public static GuessEvaluator getSingleton() {
-    if (singleton == null) {
-      singleton = new GuessEvaluator();
-    }
-    return singleton;
-  }
-
-  public String evaluateGuess(String answer, String guess) {
+  public static String evaluateGuess(String answer, String guess) {
     char[] letterResponses = new char[answer.length()];
     boolean[] answerLettersMatched = new boolean[answer.length()];
 
@@ -25,7 +13,7 @@ public class GuessEvaluator {
     return new String(letterResponses);
   }
 
-  private void markCorrectLetters(
+  private static void markCorrectLetters(
           char[] letterResponses, boolean[] answerLettersMatched, String answer, String guess) {
     for (int i = 0; i < guess.length() && i < answer.length(); i++) {
       if (guess.charAt(i) == answer.charAt(i)) {
@@ -35,7 +23,7 @@ public class GuessEvaluator {
     }
   }
 
-  private void markPresentLetters(
+  private static void markPresentLetters(
           char[] letterResponses, boolean[] answerLettersMatched, String answer, String guess) {
     for (int guessIndex = 0; guessIndex < guess.length(); guessIndex++) {
       if (letterResponses[guessIndex] != 0) {
@@ -54,7 +42,7 @@ public class GuessEvaluator {
     }
   }
 
-  private void markMissingLetters(char[] letterResponses) {
+  private static void markMissingLetters(char[] letterResponses) {
     for (int responseIndex = 0; responseIndex < letterResponses.length; responseIndex++) {
       if (letterResponses[responseIndex] == 0) {
         letterResponses[responseIndex] = LetterResponse.GRAY;

@@ -10,11 +10,9 @@ import java.util.Map;
 
 public class DordlePlayer {
 
-  private final GuessEvaluator guessEvaluator;
   private final ClueFactory clueFactory;
 
   private DordlePlayer() {
-    guessEvaluator = GuessEvaluator.getSingleton();
     clueFactory = ClueFactory.getSingleton();
   }
 
@@ -69,7 +67,7 @@ public class DordlePlayer {
     possibleResponses.forEach(possibleResponse -> wordResponseDistributions.put(possibleResponse, 0));
 
     potentialSolutions.getWordList().forEach(potentialSolution -> {
-      String response = guessEvaluator.evaluateGuess(potentialSolution, testGuess);
+      String response = GuessEvaluator.evaluateGuess(potentialSolution, testGuess);
       wordResponseDistributions.put(response, wordResponseDistributions.get(response) + 1);
     });
     return wordResponseDistributions;
