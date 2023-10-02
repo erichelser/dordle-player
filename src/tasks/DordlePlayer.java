@@ -40,10 +40,10 @@ public class DordlePlayer {
     int i = 0;
     String bestGuess = "";
     double bestGuessRating = -1;
-    final List<WordResponse> possibleResponses = ResponseBuilder.buildAllPossibleResponses();
+    final List<String> possibleResponses = ResponseBuilder.buildAllPossibleResponses();
 
     for (String guess : allowedGuesses.getWordList()) {
-      Map<WordResponse, Integer> wordResponseDistributions =
+      Map<String, Integer> wordResponseDistributions =
               buildWordResponseDistributions(potentialSolutions, possibleResponses, guess);
 
       double guessRating =
@@ -62,24 +62,24 @@ public class DordlePlayer {
     return bestGuess;
   }
 
-  private Map<WordResponse, Integer> buildWordResponseDistributions(Dictionary potentialSolutions,
-                                                                    List<WordResponse> possibleResponses,
+  private Map<String, Integer> buildWordResponseDistributions(Dictionary potentialSolutions,
+                                                                    List<String> possibleResponses,
                                                                     String testGuess) {
-    Map<WordResponse, Integer> wordResponseDistributions = new HashMap<>();
+    Map<String, Integer> wordResponseDistributions = new HashMap<>();
     possibleResponses.forEach(possibleResponse -> wordResponseDistributions.put(possibleResponse, 0));
 
     potentialSolutions.getWordList().forEach(potentialSolution -> {
-      WordResponse response = guessEvaluator.evaluateGuess(potentialSolution, testGuess);
+      String response = guessEvaluator.evaluateGuess(potentialSolution, testGuess);
       wordResponseDistributions.put(response, wordResponseDistributions.get(response) + 1);
     });
     return wordResponseDistributions;
   }
 
   private double getAverageInformationGained(
-          Dictionary potentialSolutions, Map<WordResponse, Integer> wordResponseDistributions,
-          List<WordResponse> possibleResponses, String testGuess) {
+          Dictionary potentialSolutions, Map<String, Integer> wordResponseDistributions,
+          List<String> possibleResponses, String testGuess) {
     double totalBitsOfInformation = 0;
-    for (WordResponse response : possibleResponses) {
+    for (String response : possibleResponses) {
       if (wordResponseDistributions.get(response) == 0) {
         continue;
       }
@@ -94,10 +94,10 @@ public class DordlePlayer {
   }
 
   private double getAverageRemainingPotentialSolutions(
-          Dictionary potentialSolutions, Map<WordResponse, Integer> wordResponseDistributions,
-          List<WordResponse> possibleResponses, String testGuess) {
+          Dictionary potentialSolutions, Map<String, Integer> wordResponseDistributions,
+          List<String> possibleResponses, String testGuess) {
     double totalRemainingPotentialSolutions = 0;
-    for (WordResponse response : possibleResponses) {
+    for (String response : possibleResponses) {
       if (wordResponseDistributions.get(response) == 0) {
         continue;
       }

@@ -14,19 +14,19 @@ public class GuessEvaluator {
     return singleton;
   }
 
-  public WordResponse evaluateGuess(String answer, String guess) {
-    LetterResponse[] letterResponses = new LetterResponse[answer.length()];
+  public String evaluateGuess(String answer, String guess) {
+    char[] letterResponses = new char[answer.length()];
     boolean[] answerLettersMatched = new boolean[answer.length()];
 
     markCorrectLetters(letterResponses, answerLettersMatched, answer, guess);
     markPresentLetters(letterResponses, answerLettersMatched, answer, guess);
     markMissingLetters(letterResponses);
 
-    return new WordResponse(letterResponses);
+    return new String(letterResponses);
   }
 
   private void markCorrectLetters(
-          LetterResponse[] letterResponses, boolean[] answerLettersMatched, String answer, String guess) {
+          char[] letterResponses, boolean[] answerLettersMatched, String answer, String guess) {
     for (int i = 0; i < guess.length() && i < answer.length(); i++) {
       if (guess.charAt(i) == answer.charAt(i)) {
         letterResponses[i] = LetterResponse.GREEN;
@@ -36,9 +36,9 @@ public class GuessEvaluator {
   }
 
   private void markPresentLetters(
-          LetterResponse[] letterResponses, boolean[] answerLettersMatched, String answer, String guess) {
+          char[] letterResponses, boolean[] answerLettersMatched, String answer, String guess) {
     for (int guessIndex = 0; guessIndex < guess.length(); guessIndex++) {
-      if (letterResponses[guessIndex] != null) {
+      if (letterResponses[guessIndex] != 0) {
         continue;
       }
       for (int answerIndex = 0; answerIndex < answer.length(); answerIndex++) {
@@ -54,27 +54,11 @@ public class GuessEvaluator {
     }
   }
 
-  private void markMissingLetters(LetterResponse[] letterResponses) {
+  private void markMissingLetters(char[] letterResponses) {
     for (int responseIndex = 0; responseIndex < letterResponses.length; responseIndex++) {
-      if (letterResponses[responseIndex] == null) {
+      if (letterResponses[responseIndex] == 0) {
         letterResponses[responseIndex] = LetterResponse.GRAY;
       }
     }
-  }
-
-  // Lirdle rules: For each player guess, the response will contain one lie. The letter
-  // lied about will be chosen randomly, and has a fifty-fifty chance of being one of the
-  // other two response possibilities.
-  public List<WordResponse> generateLies(WordResponse trueResponse) {
-    List<WordResponse> falseResponses = new ArrayList<>();
-    for(int i=0; i<trueResponse.size(); i++){
-      for(LetterResponse unusedResponse:LetterResponse.values()) {
-        if(unusedResponse == trueResponse.get(i)){
-          continue;
-        }
-        falseResponses.add(trueResponse.clone().set(i,unusedResponse));
-      }
-    }
-    return falseResponses;
   }
 }

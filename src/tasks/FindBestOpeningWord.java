@@ -36,19 +36,19 @@ public class FindBestOpeningWord {
     String bestSolution = "";
     double bestScore = -1;
 
-    final Map<WordResponse, Integer> wordResponseDistributions = new HashMap<>();
-    final List<WordResponse> possibleResponses = ResponseBuilder.buildAllPossibleResponses();
+    final Map<String, Integer> wordResponseDistributions = new HashMap<>();
+    final List<String> possibleResponses = ResponseBuilder.buildAllPossibleResponses();
     for (String testGuess : allowedGuesses.getWordList()) {
 
       possibleResponses.forEach(possibleResponse -> wordResponseDistributions.put(possibleResponse, 0));
 
       double testScore = 0;
       for (String testSolution : potentialSolutions.getWordList()) {
-        WordResponse response = guessEvaluator.evaluateGuess(testSolution, testGuess);
+        String response = guessEvaluator.evaluateGuess(testSolution, testGuess);
         wordResponseDistributions.put(response, wordResponseDistributions.get(response) + 1);
       }
 
-      for (WordResponse response : possibleResponses) {
+      for (String response : possibleResponses) {
         List<Clue> solutionClues = clueFactory.buildClues(testGuess, response);
         int remain = allowedGuesses.countRemainingPossibleWords(solutionClues);
         if (isLogScale) {
