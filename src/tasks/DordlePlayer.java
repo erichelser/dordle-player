@@ -43,14 +43,22 @@ public class DordlePlayer {
       String solutionB = solutionWords.getWord(indexB);
       int score = simulateDoublePlay(allowedGuesses, solutionWords, responseMatrix, solutionA, solutionB, bestOpener);
       scoreTally[score]++;
-      if (game % 1 == 0) {
-        System.out.print("Games: " + game + " [ ");
-        for (int scoreEntry : scoreTally) {
-          System.out.print(scoreEntry + " ");
-        }
-        System.out.println("]");
+      System.out.print("Games: " + game + " [ ");
+      for (int scoreEntry : scoreTally) {
+        System.out.print(scoreEntry + " ");
       }
+      System.out.println("] {" + average(scoreTally) + "}");
     }
+  }
+
+  private double average(int[] scoreTally) {
+    double sum = 0;
+    int games = 0;
+    for (int i = 0; i < scoreTally.length; i++) {
+      sum += scoreTally[i] * i;
+      games += scoreTally[i];
+    }
+    return sum / games;
   }
 
   private int simulateDoublePlay(Dictionary allowedGuesses, Dictionary solutionWords,
