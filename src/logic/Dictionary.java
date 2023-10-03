@@ -4,20 +4,17 @@ import clue.Clue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Dictionary {
-  private final Set<String> wordList;
+  private final List<String> wordList;
 
   public Dictionary() {
-    wordList = new HashSet<>();
+    wordList = new ArrayList<>();
   }
 
-  public Dictionary(Set<String> wordList) {
+  public Dictionary(List<String> wordList) {
     this.wordList = wordList;
   }
 
@@ -32,8 +29,12 @@ public class Dictionary {
     return this;
   }
 
-  public Set<String> getWordList() {
+  public List<String> getWordList() {
     return wordList;
+  }
+
+  public String getWord(int index) {
+    return wordList.get(index);
   }
 
   public int size() {

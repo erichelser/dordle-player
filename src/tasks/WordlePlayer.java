@@ -3,10 +3,12 @@ package tasks;
 import logic.Dictionary;
 import logic.ResponseMatrix;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WordlePlayer {
-
 
   private WordlePlayer() {
   }
@@ -25,7 +27,7 @@ public class WordlePlayer {
 
     ResponseMatrix responseMatrix = new ResponseMatrix(allowedGuesses, solutionWords);
     long start = System.currentTimeMillis();
-    String bestOpener = determineBestPlay(allowedGuesses, solutionWords, responseMatrix);
+    String bestOpener = "SOARE"; //determineBestPlay(allowedGuesses, solutionWords, responseMatrix);
     long stop = System.currentTimeMillis();
     System.out.println("Completed in " + (stop - start) + " ms");
 
@@ -33,7 +35,7 @@ public class WordlePlayer {
     for (String solution : solutionWords.getWordList()) {
       int score = simulatePlay(allowedGuesses, solutionWords, responseMatrix, solution, bestOpener);
       scoreTally[score]++;
-      
+
     }
 
     for (int i = 1; i < scoreTally.length; i++) {
@@ -61,10 +63,12 @@ public class WordlePlayer {
   }
 
   private String determineBestPlay(Dictionary allowedGuesses,
-                                   Dictionary potentialSolutions, ResponseMatrix responseMatrix) {
+                                   Dictionary potentialSolutions,
+                                   ResponseMatrix responseMatrix) {
     if (potentialSolutions.size() == 1) {
       return potentialSolutions.getWordList().stream().findFirst().get();
     }
+
     int i = 0;
     String bestGuess = "";
     double bestGuessRating = -9999;
@@ -87,7 +91,6 @@ public class WordlePlayer {
                                                               String testGuess,
                                                               ResponseMatrix responseMatrix) {
     Map<String, Integer> wordResponseDistributions = new HashMap<>();
-
     potentialSolutions.getWordList().forEach(potentialSolution -> {
       String response = responseMatrix.lookup(testGuess, potentialSolution);
       int count = 0;
@@ -113,8 +116,7 @@ public class WordlePlayer {
   }
 
   private double getAverageRemainingPotentialSolutions(
-          Dictionary potentialSolutions, Map<String, Integer> wordResponseDistributions,
-          List<String> possibleResponses, String testGuess) {
+          Dictionary potentialSolutions, Map<String, Integer> wordResponseDistributions) {
     double totalRemainingPotentialSolutions = 0;
     for (String response : wordResponseDistributions.keySet()) {
       double remainingPotentialSolutionsCount = wordResponseDistributions.get(response);
@@ -127,7 +129,7 @@ public class WordlePlayer {
                                               ResponseMatrix responseMatrix,
                                               String testGuess,
                                               String response) {
-    Set<String> solutionSubset = new HashSet<>();
+    List<String> solutionSubset = new ArrayList<>();
     potentialSolutions.getWordList().forEach(potentialSolution -> {
       if (responseMatrix.lookup(testGuess, potentialSolution).equals(response)) {
         solutionSubset.add(potentialSolution);
