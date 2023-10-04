@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseMatrix {
-  private Map<String, Map<String, String>> responseLookup;
+  private final Map<String, Map<String, String>> responseLookup;
 
   public ResponseMatrix(Dictionary allowedGuesses, Dictionary solutionWords) {
     responseLookup = new HashMap<>();

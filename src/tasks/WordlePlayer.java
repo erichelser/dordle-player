@@ -3,12 +3,7 @@ package tasks;
 import logic.Dictionary;
 import logic.ResponseMatrix;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class WordlePlayer extends BasicPlayer{
+public class WordlePlayer extends BasicPlayer {
 
   private WordlePlayer() {
   }
@@ -26,10 +21,7 @@ public class WordlePlayer extends BasicPlayer{
             .addWordsFromFile("data/wordle_solutions.csv");
 
     ResponseMatrix responseMatrix = new ResponseMatrix(allowedGuesses, solutionWords);
-    long start = System.currentTimeMillis();
-    String bestOpener = "SOARE"; //determineBestPlay(allowedGuesses, solutionWords, responseMatrix);
-    long stop = System.currentTimeMillis();
-    System.out.println("Completed in " + (stop - start) + " ms");
+    String bestOpener = determineBestSinglePlay(allowedGuesses, solutionWords, responseMatrix);
 
     int[] scoreTally = new int[10];
     for (String solution : solutionWords.getWordList()) {
@@ -41,9 +33,6 @@ public class WordlePlayer extends BasicPlayer{
     for (int i = 1; i < scoreTally.length; i++) {
       System.out.println(i + ": " + scoreTally[i]);
     }
-
-    System.out.println("Completed in " + (stop - start) + " ms");
-
   }
 
 

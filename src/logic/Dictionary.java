@@ -1,11 +1,8 @@
 package logic;
 
-import clue.Clue;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Dictionary {
   private final List<String> wordList;
@@ -15,7 +12,8 @@ public class Dictionary {
   }
 
   public Dictionary(List<String> wordList) {
-    this.wordList = wordList;
+    this();
+    this.wordList.addAll(wordList);
   }
 
   public Dictionary addWordsFromFile(String sourceFile) {
@@ -39,18 +37,6 @@ public class Dictionary {
 
   public int size() {
     return wordList.size();
-  }
-
-  public Set<String> filterByClues(Collection<Clue> clues) {
-    return wordList.stream().filter(word ->
-                    clues.stream().allMatch(clue -> clue.applyTo(word)))
-            .collect(Collectors.toSet());
-  }
-
-  public int countRemainingPossibleWords(Collection<Clue> clues) {
-    return wordList.stream().map(word ->
-                    clues.stream().allMatch(clue -> clue.applyTo(word)) ? 1 : 0)
-            .reduce(0, Integer::sum);
   }
 
   private Set<String> readWordsFromFile(String location) {

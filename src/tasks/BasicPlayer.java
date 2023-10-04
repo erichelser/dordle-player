@@ -108,10 +108,12 @@ public abstract class BasicPlayer {
     double bestGuessRating = -9999;
 
     for (String guess : allowedGuesses.getWordList()) {
-      Map<String, Integer> wordResponseDistributionsA = buildWordResponseDistributions(potentialSolutionsA, guess, responseMatrix);
+      Map<String, Integer> wordResponseDistributionsA =
+              buildWordResponseDistributions(potentialSolutionsA, guess, responseMatrix);
       double guessRatingA = getAverageInformationGained(potentialSolutionsA, wordResponseDistributionsA);
 
-      Map<String, Integer> wordResponseDistributionsB = buildWordResponseDistributions(potentialSolutionsB, guess, responseMatrix);
+      Map<String, Integer> wordResponseDistributionsB =
+              buildWordResponseDistributions(potentialSolutionsB, guess, responseMatrix);
       double guessRatingB = getAverageInformationGained(potentialSolutionsB, wordResponseDistributionsB);
 
       double totalGuessRating = guessRatingA + guessRatingB;
@@ -140,24 +142,20 @@ public abstract class BasicPlayer {
   }
 
   private double getAverageInformationGained(
-          Dictionary potentialSolutions, Map<String, Integer> wordResponseDistributions) {
+          Dictionary potentialSolutions, Map<String, Integer> resultDistribution) {
     double totalBitsOfInformation = 0;
-    for (String response : wordResponseDistributions.keySet()) {
-      double remainingPotentialSolutions = wordResponseDistributions.get(response);
-      if (remainingPotentialSolutions != 0) {
-        double bitsOfInformation = log2(remainingPotentialSolutions / potentialSolutions.size());
-        totalBitsOfInformation += bitsOfInformation * wordResponseDistributions.get(response);
-      }
+    for (Integer frequency : resultDistribution.values()) {
+      double bitsOfInformation = log2((double) frequency / potentialSolutions.size());
+      totalBitsOfInformation += bitsOfInformation * frequency;
     }
     return totalBitsOfInformation / potentialSolutions.size();
   }
 
   private double getAverageRemainingPotentialSolutions(
-          Dictionary potentialSolutions, Map<String, Integer> wordResponseDistributions) {
+          Dictionary potentialSolutions, Map<String, Integer> resultDistribution) {
     double totalRemainingPotentialSolutions = 0;
-    for (String response : wordResponseDistributions.keySet()) {
-      double remainingPotentialSolutionsCount = wordResponseDistributions.get(response);
-      totalRemainingPotentialSolutions += remainingPotentialSolutionsCount * wordResponseDistributions.get(response);
+    for (Integer frequency : resultDistribution.values()) {
+      totalRemainingPotentialSolutions += frequency * frequency;
     }
     return totalRemainingPotentialSolutions / potentialSolutions.size();
   }
